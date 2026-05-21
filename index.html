@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>치과대학 학생 진료 환자 모집</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b0f;
+    --bg2: #0f1318;
+    --bg3: #141920;
+    --mint: #2dd4bf;
+    --mint-dim: #14b8a6;
+    --mint-glow: rgba(45, 212, 191, 0.15);
+    --mint-border: rgba(45, 212, 191, 0.25);
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --text-faint: #484f58;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* 배경 그리드 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45,212,191,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,212,191,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 상단 글로우 */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(45,212,191,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--mint-glow);
+    border: 1px solid var(--mint-border);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--mint);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--mint);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero-title span {
+    color: var(--mint);
+    position: relative;
+  }
+
+  .hero-title span::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--mint);
+    opacity: 0.4;
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--text-dim);
+    max-width: 480px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--mint);
+    color: #0d1117;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 16px 36px;
+    border-radius: 100px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: all 0.3s;
+    animation: fadeUp 0.8s 0.3s ease both;
+    box-shadow: 0 0 40px rgba(45,212,191,0.3);
+  }
+
+  .hero-cta:hover {
+    background: #5eead4;
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(45,212,191,0.5);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-faint);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(var(--mint), transparent);
+    animation: scrollLine 2s infinite;
+  }
+
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--mint);
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 600;
+    margin-bottom: 48px;
+    line-height: 1.3;
+  }
+
+  /* 치료 항목 카드 */
+  .age-group {
+    margin-bottom: 48px;
+  }
+
+  .age-tag {
+    display: inline-block;
+    background: var(--mint-glow);
+    border: 1px solid var(--mint-border);
+    color: var(--mint);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .treatment-card {
+    background: var(--bg2);
+    border: 1px solid #21262d;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .treatment-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--mint);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .treatment-card:hover {
+    border-color: var(--mint-border);
+    background: var(--bg3);
+    transform: translateX(4px);
+  }
+
+  .treatment-card:hover::before {
+    opacity: 1;
+  }
+
+  .treatment-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .treatment-name .icon {
+    color: var(--mint);
+    font-size: 18px;
+  }
+
+  .treatment-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* 장점 그리드 */
+  .advantage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .advantage-item {
+    background: var(--bg2);
+    border: 1px solid #21262d;
+    border-radius: 16px;
+    padding: 28px 24px;
+    transition: all 0.3s;
+  }
+
+  .advantage-item:hover {
+    border-color: var(--mint-border);
+    background: var(--bg3);
+  }
+
+  .advantage-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .advantage-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .advantage-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* 진행 방법 */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 24px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 48px;
+    bottom: -16px;
+    width: 1px;
+    background: linear-gradient(var(--mint-border), transparent);
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--mint-glow);
+    border: 1px solid var(--mint-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mint);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .step-content {
+    padding: 8px 0 40px;
+  }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* 비용 안내 */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .cost-item {
+    background: var(--bg2);
+    border: 1px solid #21262d;
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .cost-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .cost-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--mint);
+  }
+
+  .cost-note {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 6px;
+  }
+
+  /* 주의사항 */
+  .notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .notice-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--bg2);
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .notice-dot {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--mint);
+    margin-top: 8px;
+    opacity: 0.6;
+  }
+
+  /* CTA 섹션 */
+  .cta-section {
+    text-align: center;
+    padding: 100px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(45,212,191,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .cta-sub {
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    font-size: 15px;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--mint);
+    color: #0d1117;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 18px 48px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 0 60px rgba(45,212,191,0.3);
+    letter-spacing: 0.02em;
+  }
+
+  .cta-btn:hover {
+    background: #5eead4;
+    transform: translateY(-3px);
+    box-shadow: 0 0 80px rgba(45,212,191,0.5);
+  }
+
+  .location-tag {
+    margin-top: 24px;
+    color: var(--text-faint);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* 구분선 */
+  .divider {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .divider hr {
+    border: none;
+    border-top: 1px solid #21262d;
+  }
+
+  /* 애니메이션 */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 반응형 */
+  @media (max-width: 600px) {
+    .advantage-grid { grid-template-columns: 1fr; }
+    .cost-grid { grid-template-columns: 1fr 1fr; }
+    .treatment-card { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">치과대학 학생 진료 모집</div>
+  <h1 class="hero-title">
+    더 꼼꼼하게,<br>
+    비용 없이 받는<br>
+    <span>치과 진료</span>
+  </h1>
+  <p class="hero-sub">교수님 감독하에 진행되는 안전한 학생 진료.<br>진료 비용은 제가 부담합니다.</p>
+  <a href="#contact" class="hero-cta">📩 오픈카톡으로 문의하기</a>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    SCROLL
+  </div>
+</div>
+
+<!-- 치료 항목 -->
+<section class="fade-up">
+  <div class="section-label">Treatment</div>
+  <h2 class="section-title">치료 항목</h2>
+
+  <div class="age-group">
+    <span class="age-tag">20대 추천</span>
+    <div class="treatment-card">
+      <div class="treatment-name"><span class="icon">🦷</span> 사랑니 발치</div>
+      <div class="treatment-desc">사랑니는 위치 특성상 칫솔질이 어려워 충치가 쉽게 생겨요. 방치하면 옆 어금니까지 충치가 번질 수 있고, 염증이 생기면 갑자기 극심한 통증이 올 수 있어요. 젊을 때 뽑을수록 회복이 빠르고 합병증도 적어요.</div>
+    </div>
+    <div class="treatment-card">
+      <div class="treatment-name"><span class="icon">🔍</span> 어금니 씹는면 충치 치료</div>
+      <div class="treatment-desc">충치는 초기일수록 간단하게 치료할 수 있어요. 방치하면 점점 깊어져 신경치료까지 필요할 수 있고, 그만큼 비용과 시간도 늘어나요. 지금 치료하는 게 가장 현명한 선택이에요.</div>
+    </div>
+  </div>
+
+  <div class="age-group">
+    <span class="age-tag">중장년층 추천</span>
+    <div class="treatment-card">
+      <div class="treatment-name"><span class="icon">💧</span> 치아 목 부분 충치 / 패임 치료</div>
+      <div class="treatment-desc">치아 목 부분은 칫솔질 압력이나 산에 의해 패이거나 충치가 생기기 쉬운 부위예요. 시린 이의 주요 원인이 되고, 방치하면 점점 깊어져 신경까지 영향을 줄 수 있어요.</div>
+    </div>
+    <div class="treatment-card">
+      <div class="treatment-name"><span class="icon">🌿</span> 잇몸 치료 (잇몸 속 치석 제거, 염증 치료)</div>
+      <div class="treatment-desc">잇몸병은 초기엔 통증이 없어 모르고 지나치는 경우가 많아요. 방치하면 잇몸뼈가 녹아 결국 치아를 잃을 수 있어요. 초기에 관리할수록 치아를 오래 유지할 수 있어요.</div>
+    </div>
+  </div>
+
+  <div class="age-group">
+    <span class="age-tag">소아 추천</span>
+    <div class="treatment-card">
+      <div class="treatment-name"><span class="icon">⭐</span> 불소 도포 (무료)</div>
+      <div class="treatment-desc">어린이 치아는 아직 단단하지 않아 충치에 취약해요. 불소 도포는 치아의 재광화를 도와 충치를 예방하는 가장 간단하고 효과적인 방법이에요.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- 학생 진료란? -->
+<section class="fade-up">
+  <div class="section-label">About</div>
+  <h2 class="section-title">학생 진료란?</h2>
+  <p style="color: var(--text-dim); font-size: 15px; line-height: 1.9; margin-bottom: 40px;">
+    치과대학 학생 진료는 단순한 실습이 아닙니다.<br>
+    모든 진료 단계마다 교수님의 직접 확인과 승인 하에 진행되는, 오히려 더 철저한 진료 시스템이에요.
+  </p>
+  <div class="advantage-grid">
+    <div class="advantage-item">
+      <span class="advantage-icon">👨‍⚕️</span>
+      <div class="advantage-title">단계별 교수님 직접 감독</div>
+      <div class="advantage-desc">진료의 매 단계마다 치과대학 교수님이 직접 확인하고 승인합니다. 한 단계도 그냥 넘어가는 법이 없어요.</div>
+    </div>
+    <div class="advantage-item">
+      <span class="advantage-icon">🏥</span>
+      <div class="advantage-title">치과병원급 정품 재료 사용</div>
+      <div class="advantage-desc">치과대학 병원에서 사용하는 정품 재료를 그대로 사용합니다. 재료 걱정은 하지 않으셔도 돼요.</div>
+    </div>
+    <div class="advantage-item">
+      <span class="advantage-icon">🔬</span>
+      <div class="advantage-title">일반 치과보다 꼼꼼한 기준</div>
+      <div class="advantage-desc">실습이기 때문에 오히려 더 엄격한 기준이 적용돼요. 천천히, 세심하게 진료해드립니다.</div>
+    </div>
+    <div class="advantage-item">
+      <span class="advantage-icon">💰</span>
+      <div class="advantage-title">비용은 제가 부담</div>
+      <div class="advantage-desc">진료 비용은 전액 제가 부담합니다. 원하시면 스케일링도 서비스로 해드려요.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- 진행 방법 -->
+<section class="fade-up">
+  <div class="section-label">Process</div>
+  <h2 class="section-title">진행 방법</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">오픈카톡으로 문의</div>
+        <div class="step-desc">아래 오픈카톡 링크로 편하게 문의해 주세요.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">근처 치과에서 진단 받기</div>
+        <div class="step-desc">근처 치과에서 먼저 진단을 받아주세요. 진단 비용은 제가 부담합니다.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">진단 결과 가지고 상담</div>
+        <div class="step-desc">진단 결과를 바탕으로 진료 가능 여부를 함께 확인해요.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">일정 조율 후 학교에서 진료</div>
+        <div class="step-desc">일정은 상담 후 조율해서 결정하고, 치과대학에서 진료를 진행해요.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- 비용 안내 -->
+<section class="fade-up">
+  <div class="section-label">Cost</div>
+  <h2 class="section-title">추가 비용 안내</h2>
+  <div class="cost-grid">
+    <div class="cost-item">
+      <div class="cost-label">진료 비용</div>
+      <div class="cost-value">0원</div>
+      <div class="cost-note">제가 부담합니다</div>
+    </div>
+    <div class="cost-item">
+      <div class="cost-label">광주 시내 교통비</div>
+      <div class="cost-value">지원</div>
+      <div class="cost-note">제가 지원해드립니다</div>
+    </div>
+    <div class="cost-item">
+      <div class="cost-label">타 지역 교통비</div>
+      <div class="cost-value">협의</div>
+      <div class="cost-note">타 지역도 환영합니다</div>
+    </div>
+    <div class="cost-item">
+      <div class="cost-label">타 치과 진단 비용</div>
+      <div class="cost-value">0원</div>
+      <div class="cost-note">제가 부담합니다</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- 후기 -->
+<section class="fade-up">
+  <div class="section-label">Review</div>
+  <h2 class="section-title">후기</h2>
+  <div style="background: var(--bg2); border: 1px solid #21262d; border-radius: 16px; padding: 48px; text-align: center;">
+    <div style="font-size: 32px; margin-bottom: 16px;">🦷</div>
+    <div style="color: var(--text-faint); font-size: 14px;">첫 번째 후기를 기다리고 있어요.<br>진료 후 소감을 남겨주시면 감사하겠습니다.</div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- 주의사항 -->
+<section class="fade-up">
+  <div class="section-label">Notice</div>
+  <h2 class="section-title">주의사항</h2>
+  <div class="notice-list">
+    <div class="notice-item">
+      <div class="notice-dot"></div>
+      꼼꼼한 진료 특성상 일반 치과보다 내원 횟수 및 시간이 길 수 있습니다.
+    </div>
+    <div class="notice-item">
+      <div class="notice-dot"></div>
+      진료 중 특유의 맛이나 냄새가 느껴질 수 있으나, 상하거나 문제가 있는 것이 아닙니다. 사용 재료는 일반 치과와 동일하거나 그 이상의 재료를 사용합니다.
+    </div>
+    <div class="notice-item">
+      <div class="notice-dot"></div>
+      케이스에 따라 진료가 불가할 수 있습니다.
+    </div>
+    <div class="notice-item">
+      <div class="notice-dot"></div>
+      진료 시작 후 끝까지 함께해 주실 분을 모집합니다.
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section fade-up" id="contact">
+  <h2 class="cta-title">지금 바로 문의해보세요</h2>
+  <p class="cta-sub">치과 비용 부담되셨던 분들께 드리는 기회입니다 🦷</p>
+  <a href="#" class="cta-btn">📩 오픈카톡으로 문의하기</a>
+  <div class="location-tag">📍 광주</div>
+</div>
+
+<script>
+  // 스크롤 애니메이션
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
